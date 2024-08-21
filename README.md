@@ -26,7 +26,6 @@ IntelliJ IDEA detectará automáticamente el proyecto Maven y lo configurará.
 El proyecto incluye una base de datos H2 en memoria. No es necesario realizar cambios en application.properties, pero aquí está el contenido por referencia:
 
 ```
-Copiar código
 spring.datasource.url=jdbc:h2:mem:testdb
 spring.datasource.driverClassName=org.h2.Driver
 spring.datasource.username=sa
@@ -40,7 +39,6 @@ spring.jpa.hibernate.ddl-auto=update
 Para construir el proyecto:
 
 ```
-Copiar código
 mvn clean install
 ```
 💻 Ejecución de la Aplicación
@@ -78,45 +76,72 @@ Verifica los resultados de las pruebas en la consola para identificar cualquier 
 
 📋 Endpoints Principales
 
-Registro de Usuario
+Registro de Usuario Caso Exitoso
 URL: POST /api/creacionUsuarios/registro
-Formato de Solicitud:
-json
-Copiar código
+Formato de Solicitud: json
+
 ```
 {
-"nombre": "Juan Rodriguez",
-"correo": "juan@rodriguez.org",
-"contraseña": "P@ssw0rd",
-"telefonos": [
-{
-"numero": "1234567",
-"codigoCiudad": "1",
-"codigoPais": "57"
-}
-]
-}
-Formato de Respuesta:
-json
-Copiar código
-{
-"id": "4fd15c60-7e5d-42e3-9733-467e43adfcbd",
-"nombre": "Juan Rodriguez",
-"correo": "juan@rodriguez.org",
-"telefonos": [
-{
-"numero": "1234567",
-"codigoCiudad": "1",
-"codigoPais": "57"
-}
-],
-"creado": "2024-08-14T12:45:00",
-"modificado": "2024-08-14T12:45:00",
-"ultimoIngreso": "2024-08-14T12:45:00",
-"token": "eyJhbGciOiJIUzI1NiIsInR...",
-"estaActivo": true
+    "nombre": "Juan Rodriguez",
+    "correo": "juan@rodriguez.org",
+    "contraseña": "P@ssw0rd",
+    "telefonos": [
+        {
+            "numero": "1234567",
+            "codigoCiudad": "1",
+            "codigoPais": "57"
+        }
+    ]
 }
 ```
+
+Formato de Respuesta: json
+```
+{
+    "id": "4fd15c60-7e5d-42e3-9733-467e43adfcbd",
+    "nombre": "Juan Rodriguez",
+    "correo": "juan@rodriguez.org",
+    "telefonos": [
+        {
+            "numero": "1234567",
+            "codigoCiudad": "1",
+            "codigoPais": "57"
+        }
+    ],
+    "creado": "2024-08-14T12:45:00",
+    "modificado": "2024-08-14T12:45:00",
+    "ultimoIngreso": "2024-08-14T12:45:00",
+    "token": "eyJhbGciOiJIUzI1NiIsInR...",
+    "estaActivo": true
+}
+```
+
+Registro de Usuario Caso Existente
+URL: POST /api/creacionUsuarios/registro
+Formato de Solicitud: json
+
+```
+{
+    "nombre": "Juan Rodriguez",
+    "correo": "juan@rodriguez.org",
+    "contraseña": "hunter2",
+    "telefonos": [
+        {
+            "numero": "1234567",
+            "codigoCiudad": "1",
+            "codigoPais": "57"
+        }
+    ]
+}
+```
+
+Formato de Respuesta: json
+```
+{
+    "mensaje": "El correo ya registrado"
+}
+```
+
 📖 Swagger API Documentation
 
 Documentación interactiva de la API disponible en:
