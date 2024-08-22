@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -73,6 +74,21 @@ public class UsuarioServicioTest
         });
 
         assertEquals("El correo ya registrado", exception.getReason());
+    }
+
+    @Test
+    void testObtenerUsuarioPorId() {
+        UUID id = UUID.randomUUID();
+        Usuario usuario = new Usuario();
+        usuario.setId(id);
+
+        when(usuarioRepositorio.findById(id)).thenReturn(Optional.of(usuario));
+
+        Usuario usuarioObtenido = usuarioServicio.obtenerUsuarioPorId(id);
+
+        assertNotNull(usuarioObtenido);
+        assertEquals(id, usuarioObtenido.getId());
+        verify(usuarioRepositorio, times(1)).findById(id);
     }
 }
 

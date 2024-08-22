@@ -16,8 +16,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -58,7 +59,7 @@ public class UsuarioControladorTest
         when(usuarioServicio.crearUsuario(any(Usuario.class))).thenReturn(usuarioCreado);
 
         // Ejecución y verificación
-        mockMvc.perform(post("/api/usuarios/registro")
+        mockMvc.perform(post("/api/creacionUsuarios/registro")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(usuario)))
                 .andExpect(status().isCreated())
@@ -76,11 +77,30 @@ public class UsuarioControladorTest
         when(usuarioServicio.crearUsuario(any(Usuario.class)))
                 .thenThrow(new ResponseStatusException(HttpStatus.BAD_REQUEST, "El correo ya registrado"));
 
-        mockMvc.perform(post("/api/usuarios/registro")
+        mockMvc.perform(post("/api/creacionUsuarios/registro")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(usuario)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.mensaje").value("El correo ya registrado"));
+    }
+
+    @Test
+    void testObtenerUsuarioPorId() throws Exception {
+        UUID id = UUID.randomUUID();
+        Usuario usuario = new Usuario();
+        usuario.setId(id);
+        usuario.setNombre("Juan Rodriguez");
+        usuario.setCorreo("juan@rodriguez.org");
+
+        when(usuarioServicio.obtenerUsuarioPorId(id)).thenReturn(usuario);
+
+        mockMvc.perform(get("/api/creacionUsuarios/{id}", id)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id.toString()))
+                .andExpect(jsonPath("$.nombre").value("Juan Rodriguez"));
+
+        verify(usuarioServicio, times(1)).obtenerUsuarioPorId(id);
     }
 }
 
